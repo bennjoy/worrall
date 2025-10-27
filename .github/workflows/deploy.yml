@@ -42,11 +42,11 @@ jobs:
           echo "Build completed, checking output..."
           pwd
           ls -la
-          if [ -d "out" ]; then
-            echo "✓ out directory exists"
-            ls -la out/
+          if [ -d "dist" ]; then
+            echo "✓ dist directory exists"
+            ls -la dist/
           else
-            echo "✗ out directory not found"
+            echo "✗ dist directory not found"
             echo "Checking for other possible output directories:"
             find . -name "*.html" -type f
           fi
@@ -56,7 +56,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: out
+          path: dist
 
   deploy:
     environment:
