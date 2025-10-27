@@ -14,7 +14,7 @@ export default function MarleHall() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="text-2xl font-light text-gray-900">
-              Worrall Holiday Rentals
+              Worrall Group
             </Link>
             <div className="hidden md:flex space-x-8">
               <Link href="/" className="text-gray-700 hover:text-gray-900 transition-colors">
@@ -154,8 +154,7 @@ export default function MarleHall() {
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-16">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
-          <div className="text-2xl font-light mb-4">Worrall Holiday Rentals</div>
-          <p className="text-gray-400 mb-8">Premium Holiday Home Management</p>
+          <div className="text-2xl font-light mb-4">Worrall Group</div>
           <div className="flex justify-center space-x-8 text-sm text-gray-400">
             <Link href="/contact" className="hover:text-white transition-colors">Contact</Link>
             <Link href="/properties" className="hover:text-white transition-colors">Properties</Link>

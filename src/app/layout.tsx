@@ -26,8 +26,8 @@ const bbhSans = {
 };
 
 export const metadata: Metadata = {
-  title: "Worrall Holiday Rentals - Premium Holiday Home Management",
-  description: "Exceptional holiday rental management for discerning guests. Experience luxury accommodations managed with care and attention to detail.",
+  title: "Worrall Group",
+  description: "Encounter excellence.",
 };
 
 export default function RootLayout({
