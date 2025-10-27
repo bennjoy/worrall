@@ -42,27 +42,31 @@ jobs:
           NODE_ENV: production
           GITHUB_PAGES: true
           
-      - name: Create deployment directory
+      - name: Debug and prepare deployment
         run: |
-          mkdir -p deploy
-          if [ -d "dist" ]; then
-            cp -r dist/* deploy/
-          elif [ -d "out" ]; then
-            cp -r out/* deploy/
-          elif [ -d ".next" ]; then
-            cp -r .next/static deploy/static
-            cp -r public/* deploy/ 2>/dev/null || true
+          echo "=== DEBUGGING BUILD OUTPUT ==="
+          echo "Current directory:"
+          pwd
+          echo "All contents:"
+          ls -la
+          echo "Looking for build output..."
+          find . -name "index.html" -type f
+          echo "Dist directory:"
+          ls -la dist/ || echo "No dist directory"
+          
+          echo "=== PREPARING DEPLOYMENT ==="
+          # Use dist directory directly if it has index.html
+          if [ -f "dist/index.html" ]; then
+            echo "✓ Found index.html in dist, using dist directly"
           else
-            echo "No build output found, creating basic index"
-            echo "<h1>Build output not found</h1>" > deploy/index.html
+            echo "✗ No index.html in dist, this is the problem!"
+            exit 1
           fi
-          echo "Deploy directory contents:"
-          ls -la deploy/
           
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: deploy
+          path: dist
 
   deploy:
     environment:
