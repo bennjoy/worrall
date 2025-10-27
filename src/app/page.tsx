@@ -17,7 +17,7 @@ export default function Home() {
   useEffect(() => {
     let bubbleCount = 0;
     let inactivityTimeout: NodeJS.Timeout;
-    let infinityInterval: NodeJS.Timeout;
+    let infinityInterval: NodeJS.Timeout | null = null;
     let infinityAngle = 0;
     let isInfinityMode = false;
     
@@ -34,10 +34,9 @@ export default function Home() {
         }
         
         // Start infinity pattern
-        //startInfinityPattern();
+        startInfinityPattern();
       }, 1000);
     };
-    /*
     const startInfinityPattern = () => {
       isInfinityMode = true;
       const centerX = window.innerWidth * 0.75; // Center right position
@@ -75,10 +74,12 @@ export default function Home() {
         if (infinityAngle > Math.PI * 4) infinityAngle = 0; // Reset after full cycle
       }, 50); // Create bubble every 50ms
     };
-    */
     const stopInfinityPattern = () => {
       isInfinityMode = false;
-      clearInterval(infinityInterval);
+      if (infinityInterval) {
+        clearInterval(infinityInterval);
+        infinityInterval = null;
+      }
       infinityAngle = 0;
     };
     
@@ -133,7 +134,9 @@ export default function Home() {
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       clearTimeout(inactivityTimeout);
-      clearInterval(infinityInterval);
+      if (infinityInterval) {
+        clearInterval(infinityInterval);
+      }
       // Clean up any remaining bubbles
       const bubbles = document.querySelectorAll('.cursor-bubble');
       bubbles.forEach(bubble => bubble.remove());
