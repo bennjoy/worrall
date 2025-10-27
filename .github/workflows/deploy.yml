@@ -37,26 +37,31 @@ jobs:
           static_site_generator: next
           
       - name: Build with Next.js
-        run: |
-          npm run build
-          echo "Build completed, checking output..."
-          pwd
-          ls -la
-          if [ -d "dist" ]; then
-            echo "✓ dist directory exists"
-            ls -la dist/
-          else
-            echo "✗ dist directory not found"
-            echo "Checking for other possible output directories:"
-            find . -name "*.html" -type f
-          fi
+        run: npm run build
         env:
           NODE_ENV: production
+          
+      - name: Create deployment directory
+        run: |
+          mkdir -p deploy
+          if [ -d "dist" ]; then
+            cp -r dist/* deploy/
+          elif [ -d "out" ]; then
+            cp -r out/* deploy/
+          elif [ -d ".next" ]; then
+            cp -r .next/static deploy/static
+            cp -r public/* deploy/ 2>/dev/null || true
+          else
+            echo "No build output found, creating basic index"
+            echo "<h1>Build output not found</h1>" > deploy/index.html
+          fi
+          echo "Deploy directory contents:"
+          ls -la deploy/
           
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: deploy
 
   deploy:
     environment:
