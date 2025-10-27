@@ -17,9 +17,6 @@ export default function Home() {
   useEffect(() => {
     let bubbleCount = 0;
     let inactivityTimeout: NodeJS.Timeout;
-    let infinityInterval: NodeJS.Timeout | null = null;
-    let infinityAngle = 0;
-    let isInfinityMode = false;
     
     // Set initial timeout when page loads
     const setInactivityTimer = () => {
@@ -33,54 +30,8 @@ export default function Home() {
           console.log('Could not find holochrome element');
         }
         
-        // Start infinity pattern
-        startInfinityPattern();
+
       }, 1000);
-    };
-    const startInfinityPattern = () => {
-      isInfinityMode = true;
-      const centerX = window.innerWidth * 0.75; // Center right position
-      const centerY = window.innerHeight * 0.5;
-      const scale = 100; // Size of the infinity symbol
-      
-      infinityInterval = setInterval(() => {
-        // Parametric equations for infinity symbol (lemniscate)
-        // x = a * cos(t) / (1 + sin²(t))
-        // y = a * sin(t) * cos(t) / (1 + sin²(t))
-        const t = infinityAngle;
-        const sinT = Math.sin(t);
-        const cosT = Math.cos(t);
-        const denominator = 1 + sinT * sinT;
-        
-        const x = centerX + (scale * cosT) / denominator;
-        const y = centerY + (scale * sinT * cosT) / denominator;
-        
-        // Create bubble at infinity path position
-        const bubble = document.createElement('div');
-        bubble.className = 'cursor-bubble';
-        bubble.style.left = `${x - 12}px`;
-        bubble.style.top = `${y - 12}px`;
-        
-        document.body.appendChild(bubble);
-        
-        // Remove bubble after animation completes
-        setTimeout(() => {
-          if (bubble.parentNode) {
-            bubble.parentNode.removeChild(bubble);
-          }
-        }, 500);
-        
-        infinityAngle += 0.1; // Speed of infinity pattern
-        if (infinityAngle > Math.PI * 4) infinityAngle = 0; // Reset after full cycle
-      }, 50); // Create bubble every 50ms
-    };
-    const stopInfinityPattern = () => {
-      isInfinityMode = false;
-      if (infinityInterval) {
-        clearInterval(infinityInterval);
-        infinityInterval = null;
-      }
-      infinityAngle = 0;
     };
     
     // Start the initial timer
@@ -100,32 +51,25 @@ export default function Home() {
         console.log('Removed inactive class');
       }
       
-      // // Stop infinity pattern and return to cursor following
-      // if (isInfinityMode) {
-      //   stopInfinityPattern();
-      // }
-      
       // Reset the inactivity timer
       setInactivityTimer();
       
-      // Create cursor trail bubbles only when not in infinity mode
-      if (!isInfinityMode) {
-        bubbleCount++;
-        if (bubbleCount % 1 === 0) { // Create bubble on every mouse move for maximum frequency
-          const bubble = document.createElement('div');
-          bubble.className = 'cursor-bubble';
-          bubble.style.left = `${e.clientX - 12}px`; // Center the 24px bubble
-          bubble.style.top = `${e.clientY - 12}px`;
-          
-          document.body.appendChild(bubble);
-          
-          // Remove bubble after animation completes
-          setTimeout(() => {
-            if (bubble.parentNode) {
-              bubble.parentNode.removeChild(bubble);
-            }
-          }, 500);
-        }
+      // Create cursor trail bubbles
+      bubbleCount++;
+      if (bubbleCount % 1 === 0) { // Create bubble on every mouse move for maximum frequency
+        const bubble = document.createElement('div');
+        bubble.className = 'cursor-bubble';
+        bubble.style.left = `${e.clientX - 12}px`; // Center the 24px bubble
+        bubble.style.top = `${e.clientY - 12}px`;
+        
+        document.body.appendChild(bubble);
+        
+        // Remove bubble after animation completes
+        setTimeout(() => {
+          if (bubble.parentNode) {
+            bubble.parentNode.removeChild(bubble);
+          }
+        }, 500);
       }
     };
 
@@ -134,9 +78,6 @@ export default function Home() {
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       clearTimeout(inactivityTimeout);
-      if (infinityInterval) {
-        clearInterval(infinityInterval);
-      }
       // Clean up any remaining bubbles
       const bubbles = document.querySelectorAll('.cursor-bubble');
       bubbles.forEach(bubble => bubble.remove());
