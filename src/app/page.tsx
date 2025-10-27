@@ -1,103 +1,210 @@
+﻿"use client";
+
 import Image from "next/image";
+import Link from "next/link";
+import { useEffect } from "react";
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const services = [
+    { name: "WEDDINGS", href: "/properties/marle-hall" },
+    { name: "CONFERENCES", href: null },
+    { name: "EVENTS", href: null },
+    { name: "WEDDINGS", href: null },
+    { name: "CONFERENCES", href: null },
+    { name: "EVENTS", href: null }
+  ];
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  useEffect(() => {
+    let bubbleCount = 0;
+    let inactivityTimeout: NodeJS.Timeout;
+    let infinityInterval: NodeJS.Timeout;
+    let infinityAngle = 0;
+    let isInfinityMode = false;
+    
+    // Set initial timeout when page loads
+    const setInactivityTimer = () => {
+      clearTimeout(inactivityTimeout);
+      inactivityTimeout = setTimeout(() => {
+        const holochrome = document.querySelector('.holochrome-background') as HTMLElement;
+        if (holochrome) {
+          holochrome.classList.add('inactive');
+          console.log('Added inactive class, element:', holochrome);
+        } else {
+          console.log('Could not find holochrome element');
+        }
+        
+        // Start infinity pattern
+        //startInfinityPattern();
+      }, 1000);
+    };
+    /*
+    const startInfinityPattern = () => {
+      isInfinityMode = true;
+      const centerX = window.innerWidth * 0.75; // Center right position
+      const centerY = window.innerHeight * 0.5;
+      const scale = 100; // Size of the infinity symbol
+      
+      infinityInterval = setInterval(() => {
+        // Parametric equations for infinity symbol (lemniscate)
+        // x = a * cos(t) / (1 + sin²(t))
+        // y = a * sin(t) * cos(t) / (1 + sin²(t))
+        const t = infinityAngle;
+        const sinT = Math.sin(t);
+        const cosT = Math.cos(t);
+        const denominator = 1 + sinT * sinT;
+        
+        const x = centerX + (scale * cosT) / denominator;
+        const y = centerY + (scale * sinT * cosT) / denominator;
+        
+        // Create bubble at infinity path position
+        const bubble = document.createElement('div');
+        bubble.className = 'cursor-bubble';
+        bubble.style.left = `${x - 12}px`;
+        bubble.style.top = `${y - 12}px`;
+        
+        document.body.appendChild(bubble);
+        
+        // Remove bubble after animation completes
+        setTimeout(() => {
+          if (bubble.parentNode) {
+            bubble.parentNode.removeChild(bubble);
+          }
+        }, 500);
+        
+        infinityAngle += 0.1; // Speed of infinity pattern
+        if (infinityAngle > Math.PI * 4) infinityAngle = 0; // Reset after full cycle
+      }, 50); // Create bubble every 50ms
+    };
+    */
+    const stopInfinityPattern = () => {
+      isInfinityMode = false;
+      clearInterval(infinityInterval);
+      infinityAngle = 0;
+    };
+    
+    // Start the initial timer
+    setInactivityTimer();
+    
+    const handleMouseMove = (e: MouseEvent) => {
+      const x = e.clientX / window.innerWidth;
+      const y = e.clientY / window.innerHeight;
+      
+      document.documentElement.style.setProperty('--mouse-x', x.toString());
+      document.documentElement.style.setProperty('--mouse-y', y.toString());
+      
+      // Reactivate holochrome colors
+      const holochrome = document.querySelector('.holochrome-background') as HTMLElement;
+      if (holochrome) {
+        holochrome.classList.remove('inactive');
+        console.log('Removed inactive class');
+      }
+      
+      // // Stop infinity pattern and return to cursor following
+      // if (isInfinityMode) {
+      //   stopInfinityPattern();
+      // }
+      
+      // Reset the inactivity timer
+      setInactivityTimer();
+      
+      // Create cursor trail bubbles only when not in infinity mode
+      if (!isInfinityMode) {
+        bubbleCount++;
+        if (bubbleCount % 1 === 0) { // Create bubble on every mouse move for maximum frequency
+          const bubble = document.createElement('div');
+          bubble.className = 'cursor-bubble';
+          bubble.style.left = `${e.clientX - 12}px`; // Center the 24px bubble
+          bubble.style.top = `${e.clientY - 12}px`;
+          
+          document.body.appendChild(bubble);
+          
+          // Remove bubble after animation completes
+          setTimeout(() => {
+            if (bubble.parentNode) {
+              bubble.parentNode.removeChild(bubble);
+            }
+          }, 500);
+        }
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      clearTimeout(inactivityTimeout);
+      clearInterval(infinityInterval);
+      // Clean up any remaining bubbles
+      const bubbles = document.querySelectorAll('.cursor-bubble');
+      bubbles.forEach(bubble => bubble.remove());
+    };
+  }, []);
+
+  return (
+    <div className="h-screen bg-gray-300 flex flex-col justify-center overflow-hidden">
+      {/* Main Logo - positioned left and cut off with holochrome effect */}
+      <div className="flex items-center justify-start -ml-8 mb-8">
+        <div className="holochrome-logo-container">
+          {/* Size reference - keeps container dimensions */}
+          <Image
+            src="/assets/worrallmask.svg"
+            alt="Worrall"
+            width={1200}
+            height={600}
+            className="holochrome-logo-reference w-auto h-80 md:h-96 lg:h-[30rem] xl:h-[36rem]"
+            priority
+          />
+          
+          {/* Holographic background */}
+          <div className="holochrome-background"></div>
+          
+          {/* Dynamic shadow that follows mouse as light source */}
+          {/* <Image
+            src="/assets/worrallmask.svg"
+            alt="Worrall Shadow"
+            width={1200}
+            height={600}
+            className="holochrome-logo-shadow w-auto h-80 md:h-96 lg:h-[30rem] xl:h-[36rem]"
+            priority
+          />
+           */}
+          {/* Negative mask logo in original color - sits over holochrome */}
+          <Image
+            src="/assets/worrallmask.svg"
+            alt="Worrall"
+            width={1200}
+            height={600}
+            className="holochrome-logo-mask w-auto h-80 md:h-96 lg:h-[30rem] xl:h-[36rem]"
+            priority
+          />
+          
+          {/* Border overlay to hide shadow bleed outside logo area */}
+          <div className="holochrome-border-overlay"></div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
+
+      {/* Horizontally Scrolling service Names */}
+      <div className="pb-20 overflow-hidden">
+        <div className="flex items-center space-x-8 animate-scroll">
+          {[...services, ...services, ...services, ...services].map((service, index) => (
+            <div key={index} className="flex items-center space-x-8">
+              {service.href ? (
+                <Link href={service.href}>
+                  <div className="text-white text-3xl font-kanit font-bold tracking-[0.3em] whitespace-nowrap hover:opacity-80 transition-opacity cursor-pointer">
+                    {service.name}
+                  </div>
+                </Link>
+              ) : (
+                <div className="text-white text-3xl font-kanit font-bold tracking-[0.3em] whitespace-nowrap">
+                  {service.name}
+                </div>
+              )}
+              {/* White dot separator */}
+              <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

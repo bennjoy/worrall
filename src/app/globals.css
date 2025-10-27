@@ -1,8 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=BBH+Sans+Hegarty:wght@300;400;500;700&display=swap');
 @import "tailwindcss";
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --mouse-x: 50%;
+  --mouse-y: 50%;
 }
 
 @theme inline {
@@ -10,6 +13,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-bbh-sans: 'BBH Sans Hegarty', sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,4 +27,188 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.font-kanit {
+  font-family: var(--font-kanit), sans-serif;
+}
+
+/* Holochrome logo container */
+.holochrome-logo-container {
+  position: relative;
+  display: inline-block;
+  width: auto;
+  height: auto;
+  background: white;
+}
+
+/* Holographic background that moves with cursor - muted colors */
+.holochrome-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  /* Make it same size as the image */
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(
+      circle at calc(var(--mouse-x) * 100%) calc(var(--mouse-y) * 100%), 
+      rgba(255, 0, 150, 0.15) 0%, 
+      rgba(0, 255, 255, 0.12) 20%, 
+      rgba(255, 255, 0, 0.08) 40%, 
+      rgba(150, 0, 255, 0.12) 60%, 
+      rgba(255, 0, 150, 0.15) 80%, 
+      rgba(0, 255, 255, 0.1) 100%
+    ),
+    linear-gradient(
+      calc(var(--mouse-x) * 180deg), 
+      rgba(255, 255, 255, 0.95) 0%, 
+      rgba(255, 240, 255, 0.93) 25%, 
+      rgba(240, 255, 255, 0.94) 50%, 
+      rgba(255, 255, 240, 0.93) 75%, 
+      rgba(255, 255, 255, 0.95) 100%
+    );
+  background-size: 150% 150%, 100% 100%;
+  background-position: 
+    calc(var(--mouse-x) * 100%) calc(var(--mouse-y) * 100%), 
+    center;
+  animation: shimmer 4s ease-in-out infinite alternate;
+}
+
+/* White overlay that fades in when inactive */
+.holochrome-background::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  opacity: 0;
+  transition: opacity 2s ease-in-out;
+  pointer-events: none;
+}
+
+/* Inactive state - fades white overlay in */
+.holochrome-background.inactive::after {
+  opacity: 1;
+}
+
+/* Dynamic shadow that follows mouse as light source - stronger and clipped */
+.holochrome-logo-shadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1.5;
+  display: block;
+  filter: blur(6px) brightness(0) opacity(0.6);
+  transform: 
+    translateX(calc((0.5 - var(--mouse-x)) * 15px))
+    translateY(calc((0.5 - var(--mouse-y)) * 15px));
+  transition: transform 0.1s ease-out;
+  /* Clip shadow to only show within the holochrome area */
+  clip-path: inset(0);
+  mix-blend-mode: multiply;
+}
+
+/* Reference element - gives container proper size, invisible */
+.holochrome-logo-reference {
+  opacity: 0;
+  position: relative;
+  z-index: 0;
+}
+
+/* Dynamic shadow that follows mouse as light source - stronger with smaller offset */
+.holochrome-logo-shadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1.5;
+  display: block;
+  filter: blur(4px) brightness(0) opacity(0.4);
+  transform: 
+    translateX(calc((0.5 - var(--mouse-x)) * 8px))
+    translateY(calc((0.5 - var(--mouse-y)) * 8px));
+  transition: transform 0.1s ease-out;
+  mix-blend-mode: multiply;
+}
+
+/* Logo mask - stays fixed on top in original color */
+.holochrome-logo-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  display: block;
+}
+
+/* Border overlay to hide shadow bleed outside logo area */
+.holochrome-border-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  pointer-events: none;
+  /* Create border that overlaps inward by 5px */
+  box-shadow: 
+    inset 5px 0 0 0 #d1d5db,
+    inset -5px 0 0 0 #d1d5db,
+    inset 0 5px 0 0 #d1d5db,
+    inset 0 -5px 0 0 #d1d5db;
+}
+
+/* Subtle shimmer animation */
+@keyframes shimmer {
+  0% {
+    background-position: 
+      calc(var(--mouse-x) * 100% - 5%) calc(var(--mouse-y) * 100% - 5%), 
+      center;
+    opacity: 0.6;
+  }
+  100% {
+    background-position: 
+      calc(var(--mouse-x) * 100% + 5%) calc(var(--mouse-y) * 100% + 5%), 
+      center;
+    opacity: 0.8;
+  }
+}
+
+/* Custom scrolling animation for service names */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-25%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll 40s linear infinite;
+}
+
+/* Cursor trail bubbles */
+.cursor-bubble {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  width: 24px;
+  height: 24px;
+  background: white;
+  border-radius: 50%;
+  animation: bubbleShrink 0.5s ease-out forwards;
+}
+
+@keyframes bubbleShrink {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
 }
