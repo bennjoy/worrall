@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -12,11 +13,11 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Add Playfair Display font for scrolling text
-const playfairDisplay = Playfair_Display({
-  variable: "--font-playfair-display",
+// Add Plus Jakarta Sans font for scrolling text
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta-sans",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
+  weight: ["300", "400", "500", "600", "700", "800"],
 });
 
 // Add BBH Sans Hegarty font
@@ -43,7 +44,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=BBH+Sans+Hegarty:wght@300;400;500;700&display=swap" rel="stylesheet" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${playfairDisplay.variable} ${bbhSans.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${plusJakartaSans.variable} ${bbhSans.variable} antialiased`}
       >
         {children}
       </body>

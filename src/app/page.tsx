@@ -102,16 +102,6 @@ export default function Home() {
           {/* Holographic background */}
           <div className="holochrome-background"></div>
           
-          {/* Dynamic shadow that follows mouse as light source */}
-          {/* <Image
-            src="/assets/worrallmask.svg"
-            alt="Worrall Shadow"
-            width={1200}
-            height={600}
-            className="holochrome-logo-shadow w-auto h-80 md:h-96 lg:h-[30rem] xl:h-[36rem]"
-            priority
-          />
-           */}
           {/* Negative mask logo in original color - sits over holochrome */}
           <Image
             src="/assets/worrallmask.svg"
@@ -134,12 +124,12 @@ export default function Home() {
             <div key={index} className="flex items-center space-x-8">
               {service.href ? (
                 <Link href={service.href}>
-                  <div className="text-white text-3xl font-playfair-display font-bold tracking-[0.3em] whitespace-nowrap hover:opacity-80 transition-opacity cursor-pointer">
+                  <div className="text-white text-3xl font-plus-jakarta-sans font-extrabold tracking-[0.3em] whitespace-nowrap hover:opacity-80 transition-opacity cursor-pointer">
                     {service.name}
                   </div>
                 </Link>
               ) : (
-                <div className="text-white text-3xl font-playfair-display font-bold tracking-[0.3em] whitespace-nowrap">
+                <div className="text-white text-3xl font-plus-jakarta-sans font-extrabold tracking-[0.3em] whitespace-nowrap">
                   {service.name}
                 </div>
               )}
