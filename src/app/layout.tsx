@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Kanit } from "next/font/google";
+import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -12,11 +12,11 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Add Kanit font for scrolling text
-const kanit = Kanit({
-  variable: "--font-kanit",
+// Add Playfair Display font for scrolling text
+const playfairDisplay = Playfair_Display({
+  variable: "--font-playfair-display",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
+  weight: ["400", "500", "600", "700", "800", "900"],
 });
 
 // Add BBH Sans Hegarty font
@@ -43,7 +43,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=BBH+Sans+Hegarty:wght@300;400;500;700&display=swap" rel="stylesheet" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${kanit.variable} ${bbhSans.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${playfairDisplay.variable} ${bbhSans.variable} antialiased`}
       >
         {children}
       </body>

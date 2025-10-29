@@ -134,12 +134,12 @@ export default function Home() {
             <div key={index} className="flex items-center space-x-8">
               {service.href ? (
                 <Link href={service.href}>
-                  <div className="text-white text-3xl font-kanit font-bold tracking-[0.3em] whitespace-nowrap hover:opacity-80 transition-opacity cursor-pointer">
+                  <div className="text-white text-3xl font-playfair-display font-bold tracking-[0.3em] whitespace-nowrap hover:opacity-80 transition-opacity cursor-pointer">
                     {service.name}
                   </div>
                 </Link>
               ) : (
-                <div className="text-white text-3xl font-kanit font-bold tracking-[0.3em] whitespace-nowrap">
+                <div className="text-white text-3xl font-playfair-display font-bold tracking-[0.3em] whitespace-nowrap">
                   {service.name}
                 </div>
               )}
