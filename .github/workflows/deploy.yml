@@ -42,6 +42,9 @@ jobs:
           NODE_ENV: production
           GITHUB_PAGES: true
           
+      - name: Export static site
+        run: npm run export
+      
       - name: Debug and prepare deployment
         run: |
           echo "=== DEBUGGING BUILD OUTPUT ==="
